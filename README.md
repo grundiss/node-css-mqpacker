@@ -197,6 +197,19 @@ fs.writeFileSync("to.css.map", result.map);
 
 See also [PostCSS document][2] for more about this `options`.
 
+### As gulp plugin
+
+```javascript
+var gulp = require('gulp');
+var mqpacker = require("css-mqpacker").gulp;
+
+gulp.task('css', function() {
+	gulp.src('**/*.css')
+		.pipe(mqpacker())
+		.pipe(gulp.dest('build'));
+});
+```
+
 
 LICENSE
 -------

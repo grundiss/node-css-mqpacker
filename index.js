@@ -191,3 +191,27 @@ module.exports.pack = function (css, opts) {
     this(opts)
   ]).process(css, opts);
 };
+
+module.exports.gulp = function(opts) {
+  var gutil = require('gulp-util');
+  var through = require('through2');
+
+  return through.obj(function(file, encoding, callback) {
+    if (file.isNull()) {
+        return callback();
+    }
+    if (file.isStream()) {
+        this.emit('error', new gutil.PluginError('css-mqpacker', 'Streams not supported!'));
+        return callback();
+    }
+
+    var file = new gutil.File({
+        path: file.path,
+        contents: new Buffer(module.exports.pack(file.contents.toString(), opts).css)
+    });
+
+    this.push(file);
+
+    return callback();
+  })
+};
